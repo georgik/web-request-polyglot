@@ -15,6 +15,21 @@ const store = new Vuex.Store({
             },
             powershell: {
                 command: 'Invoke-WebRequest -Uri',
+
+                // based on: https://stackoverflow.com/questions/11696944/powershell-v3-invoke-webrequest-https-error
+                isInsecurePrefix: `add-type @"
+    using System.Net;
+    using System.Security.Cryptography.X509Certificates;
+    public class TrustAllCertsPolicy : ICertificatePolicy {
+        public bool CheckValidationResult(
+            ServicePoint srvPoint, X509Certificate certificate,
+            WebRequest request, int certificateProblem) {
+            return true;
+        }
+    }
+"@
+[System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
+`,
                 isInsecure: '',
                 outputFile: '-OutFile'
             },
@@ -126,6 +141,9 @@ Vue.component('commands', {
                 
                 if (!model.isSecure) {
                     result += " " + options['isInsecure'] +  " ";
+                    if (options.hasOwnProperty('isInsecurePrefix')) {
+                        result = options['isInsecurePrefix'] + result;
+                    }
                 }
 
                 if (model.useOutputFile) {
