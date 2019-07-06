@@ -33,6 +33,10 @@
       <input class="command-input" type="text" name="url" :value="url" @input="urlChanged">
     </div>
 
+    <div>
+      <input type="checkbox" @change="insecureCheckboxChanged($event)"> Insecure (ignore certificate validation)
+    </div>
+
   </form>
   </script>
 

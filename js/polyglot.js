@@ -2,13 +2,32 @@
 const store = new Vuex.Store({
     state: {
         model: {
-            url: 'https://georgik.rocks/web-request-command-line-generator'
+            url: 'https://georgik.rocks/web-request-command-line-generator',
+            isSecure: true
+        },
+        commands: {
+            curl: {
+                command: 'curl',
+                isInsecure: '-k'
+            },
+            powershell: {
+                command: 'Invoke-WebRequest',
+                isInsecure: ''
+            },
+            wget: {
+                command: 'wget',
+                isInsecure: '--no-check-certificate'
+            }
         }
     },
     mutations: {
         url(state, url) {
             state.model.url = url;
+        },
+        secure(state, isSecure) {
+            state.model.isSecure = isSecure;
         }
+
     }
 });
 
@@ -27,6 +46,12 @@ Vue.component('definition', {
             },
             urlChanged: function(e) {
                 this.updateUrl(e.target.value);
+            },
+            updateSecure: function(isSecure) {
+                store.commit("secure", isSecure);
+            },
+            insecureCheckboxChanged: function(e) {
+                this.updateSecure(!e.target.checked);
             }
         }
     });
@@ -54,12 +79,24 @@ Vue.component('commands', {
             },
             commands() {
                 return {
-                    curl: "curl " + this.$store.state.model.url,
-                    powershell: "Invoke-WebRequest " + this.$store.state.model.url,
-                    wget: "wget " + this.$store.state.model.url
+                    curl: this.getCommand("curl"),
+                    powershell: this.getCommand("powershell"),
+                    wget: this.getCommand("wget")
 
                 }
-                return this.$store.state.levelMap;
+            }
+        },
+        methods: {
+            getCommand: function(command) {
+                let options = this.$store.state.commands[command];
+                var result = options['command'];
+
+                if (!this.$store.state.model.isSecure) {
+                    result += " " + options['isInsecure'] +  " ";
+                }
+
+                result += " " + this.$store.state.model.url;
+                return result;
             }
         }
     });
