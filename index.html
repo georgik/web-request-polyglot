@@ -34,6 +34,11 @@
     </div>
 
     <div>
+      <input type="checkbox" @change="outputFileCheckboxChanged($event)" :checked="useOutputFile"> Save to file: 
+      <input type="text" @input="outputFileChanged($event)" :value="outputFile">
+    </div>
+
+    <div>
       <input type="checkbox" @change="insecureCheckboxChanged($event)"> Insecure (ignore certificate validation)
     </div>
 
