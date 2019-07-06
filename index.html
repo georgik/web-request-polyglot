@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vuex@3.0.1/dist/vuex.js"></script>
+</head>
+<body>
+
+
+  <div id="polyglot">
+    <definition></definition>
+    <commands></commands>
+  </div>
+
+  <script type="text/x-template" id="definition-template">
+  <form>
+
+    <div>
+      Method: 
+      <select name="method">
+        <option value="GET">GET</option>
+        <option value="POST">POST</option>
+        <option value="DELETE">DELETE</option>
+        <option value="OPTIONS">OPTIONS</option>
+        <option value="PUT">PUT</option>
+      </select>
+    </div>
+
+    <div>
+      URL:
+      <input type="text" name="url" :value="url" @input="urlChanged">
+    </div>
+
+  </form>
+  </script>
+
+  <script type="text/x-template" id="commands-template">
+    <div>
+      <div>
+        <div v-for="(projection, projectionIndex) in projections">
+          <div>{{ projection.name }}</div>
+          <textarea :id="projection.key">{{ commands[projection.key] }}</textarea>
+        </div>
+      </div>
+
+    </div>
+  </script>
+</body>
+  <script type="text/javascript" src="js/polyglot.js"></script>
+</html>
