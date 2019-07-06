@@ -2,7 +2,7 @@
 const store = new Vuex.Store({
     state: {
         model: {
-            url: 'https://georgik.rocks/web-request-polyglot'
+            url: 'https://georgik.rocks/web-request-command-line-generator'
         }
     },
     mutations: {
